@@ -1,67 +1,36 @@
 # kiloCounter 
 
 ## Quick start
-1. install scikit-image library (this depends on your operation system)
+1. install scikit-image library (this depends on your operation system).
 
-1.1 You might also install pandas and shutil libraries.
+1.1 You might also need to install pandas library.
 
-3. Execute python kiloColorCounter.py \<number of kilobots to track\>
+The main script to be executed in a terminal is:
 
-4. The results are placed at result.txt with the following format:
+python kiloColorCounter.py <args> 
 
-\<File name\>      \<color\> \<number of kilobots of that color\> \<total number of kilobots in the file\>
+description='Kilocounter tracks R, G, B colors from kilobots video frames'
 
-For example:
-
-output0053.jpg green 10 37
-
-## Detailed doc
-
-Images/ contains the images to analyze.
-
-The kiloColorCounter script applies:
-
-1. blob detection using the Difference of Gaussian algorithm (faster but a bit imprecise).
-
-2. blob detection with the Laplace of Gaussian algorithm (slower but more accurate).
-
-See the documentation here: 
-
-https://scikit-image.org/docs/dev/auto_examples/features_detection/plot_blob.html?highlight=dog
+the expected arguments are:
 
 
-## How it works
+'kilobots', type=int, metavar='n_kilobots', help='the number of kilobots to expect in the images'
 
-Each blob detection algorithm is performed by the corresponding script:
+'-i', '--input', type=str, metavar='',
+                    help='folder containing the images to process, default is Images', default='Images'
+                    
+'-o', '--output', type=str, metavar='',
+                    help='name of the output file, default is results.csv', default='results.csv'
+                    
+'-e', '--evil_dir', type=str, metavar='',
+                    help='folder to copy the evil images, default is Evil', default='Evil'
 
-count_blobs_extract_mean_color_difference_of_Gaussian.py
-
-count_blobs_extract_mean_color_Laplacian_of_Gaussian.py
-
-
-the script count_blobs_extract_mean_color_difference_of_Gaussian.py writes the results in:
-
-results_difference_of_gaussian.txt
-
-the script countDifferenceOfGaussian.py checks if the number of detected blobs is less than the expected.
-
-### Please note that
-
-THE ACTUAL VERSION OF THE SCRIPT COUNTS VALID THE NUMBER-OF-KILOBOTS AND THE NIMBER-OF-KILOBOTS + 1 BECAUSE OF THE CURRENT EXPERIMENTS.
-
-images NOT SATISFYING SUCH CONDITION are copied to problematicImages
-
-images in problematicImages folder are analyzed with the Laplace of Gaussian blob detection.
-
-the results are written in results_laplace_of_gaussian.txt
-
-
-The script countLaplaceOfGaussian.py checks if the number of detected blobs is less than the expected, the images that do not satisfy this condition are copied to evil_images folder. 
-
-The script 
-count_blobs_extract_mean_color_difference_of_Gaussian.py writes the images with number-of-kilobots or number-of-kilobots + 1 in
-
-results.txt 
-
-The script count_blobs_extract_mean_color_Laplacian_of_Gaussian.py writes the number of blobs IN results.txt for all the processed images NO MATTER IF THE NUMBER DOES NOT MATCHES THE EXPECTED.
-
+Evil images are those where the number of kilobots does not match the expected number.
+                    
+'-n', '--n_processors', type=int, metavar='',
+                    help='the number of threads to parallelize the computation, default is os.cpu_count()', default=os.cpu_count()
+                    
+'-r', '--results_dir', type=str, metavar='',
+                    help='folder to copy all the images, default is None', default=None
+                    
+You might to create the default folders in your working directory.
